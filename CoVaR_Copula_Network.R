@@ -98,8 +98,8 @@ source('DynCopulaCoVaRUpper.R')
 #---- Supuesto_1: la primera col es la FECHA de la base de datos
 #---- Supuesto_2: Las col.2 hasta la penultima col. son las series que se modelan w.r.t la serie de la ultima columna (Ej. Ind Acc de varios paises)
 #---- Supuesto_3: La ultima col. es la serie que se mantiene en todas copulas (Ej: WTI)
-load(data.file)
-DATOS_xts    = ENSO_COFFEE                                                      # <<<---- Base de datos
+DATOS=read_xlsx(data.file)
+DATOS_xts    = xts(DATOS[,-1], order.by = as.POSIXct(DATOS[[1]])) # (objeto XTS) Se resta la primera col. (FECHA) 
 if (Serie.2 %in% Series.1)N.Series1=ncol(DATOS_xts[,Series.1[-which(Series.1==Serie.2)]])else N.Series1=ncol(DATOS_xts[,Series.1])                                      # Se resta la primera col. (FECHA) y la ultima columna (Ej: WTI)
 Name.Serie2=Serie.2                                                             # Nombre de la ultima col. es la serie que se mantiene en todas copulas (Ej: WTI)
 if (Serie.2 %in% Series.1) Name.Series1=Series.1[-which(Series.1==Serie.2)]else Name.Series1 = Series.1   #                                        # Se quitan la col de  fechas  y se definen las series.1 (i.e. country' Stock returns)
@@ -325,27 +325,10 @@ if(0){
 } 
 # Graficación ECDF
 if(0){
-  if (0) {
-    load("C:\\Users\\maico\\OneDrive - Universidad Nacional de Colombia\\BanRep\\Value at Risk\\Highdimensional CoVaR network connectedness\\Github-R\\Copula-CoVaR-\\Resultados\\VIX\\No_Ext_Reg\\CoVaR_data_vix_Pre_Crisis_2022-10-24")
-    load("C:\\Users\\maico\\OneDrive - Universidad Nacional de Colombia\\BanRep\\Value at Risk\\Highdimensional CoVaR network connectedness\\Github-R\\Copula-CoVaR-\\Resultados\\VIX\\No_Ext_Reg\\CoVaR_data_vix_Crisis_2022-10-24")
-    load("C:\\Users\\maico\\OneDrive - Universidad Nacional de Colombia\\BanRep\\Value at Risk\\Highdimensional CoVaR network connectedness\\Github-R\\Copula-CoVaR-\\Resultados\\VIX\\No_Ext_Reg\\CoVaR_data_vix_Post_Crisis_2022-10-24")
-    
-  } #Carga de datos VIX sin regresores externos.
-  if (0) {
-    load('CoVaR_data_EMBI_Global_Pre_Crisis_2022-10-25')    
-    load('CoVaR_data_EMBI_Global_Crisis_2022-10-26')    
-    load('CoVaR_data_EMBI_Global_Post_Crisis_2022-10-26')    
-    
-  } #Carga de datos EMBI sin regresores externos.
-  samp     = c('Pre_Crisis', 'Crisis', 'Post_Crisis')[3]
+  sample=CoVaR_Data
   class    = c('pdf','x11')[1]
-  if (1) {
-    if (samp=='Pre_Crisis') sample = CoVaR_data_Pre_Crisis
-    if (samp=='Crisis')     sample = CoVaR_data_Crisis
-    if (samp=='Post_Crisis')sample = CoVaR_data_Post_Crisis
-  } # Arreglo para la muestra en función de samp
-  x        = sample$CoVaR
-  y        = sample$VaR
+  x        = sample$CoVaRUp
+  y        = sample$VaRUp
   if (class=='x11'){
     x11()
     par(mfrow=c(4,3))
@@ -353,7 +336,7 @@ if(0){
   for (i in 1:ncol(x)) {
     ecdx=ecdf(as.matrix(x)[,i])
     ecdy=ecdf(as.matrix(y)[,i])
-    if (class=='pdf') pdf(file = paste0(Resultados,'/CDF_',colnames(x)[i],'_',samp,'.pdf'), onefile=FALSE)
+    if (class=='pdf') pdf(file = paste0(Resultados,'/CDF_',colnames(x)[i],'.pdf'), onefile=FALSE)
     print(plot(ecdx, main=paste0(colnames(x)[i],'_',samp), col='red', lwd=1))
     print(lines(ecdy, lwd=1))
     if(class=='pdf')dev.off()
@@ -362,7 +345,7 @@ if(0){
 # Graficación CoVaR
 if(0){
   # Unión de datos en la misma lista.
-  CoVaR_DATA=CoVaR_data_ENSO
+  CoVaR_DATA=CoVaR_Data
   plot.class = c('Up', 'Down', 'Both')[1]
   titles=c('USA - Colombia',	'USA - Brazil',	'USA - Guatemala',	'USA - Indonesia',
            'USA - Mexico', 'USA - Uganda', 'USA - Vietnam',	'Germany - Colombia',	'Germany - Brazil',
@@ -375,13 +358,13 @@ if(0){
     if(plot.class=='Up')  range=c(0,max(CoVaR_DATA$CoVaRUp[,i]))
     if(plot.class=='Down')range=c(min(CoVaR_DATA$CoVaR[,i]),0)
     if(plot.class=='Both')range=c(min(CoVaR_DATA$CoVaR[,i]),max(CoVaR_DATA$CoVaRUp[,i]))
-    pdf(file = paste0(Resultados,'/Graficas_ENSO_','_',i,'.pdf'), onefile=FALSE)
+    pdf(file = paste0(Resultados,'/Graficas_CoVaR','_',i,'.pdf'), onefile=FALSE)
     print(plot(if (plot.class=='Down'|plot.class=='Both'){
       CoVaR_DATA$CoVaR[,i]
     }else{
       CoVaR_DATA$CoVaRUp[,i]
     } ,type="l",col="red", grid.col = NA, 
-    ylim=range, xlab="Time", ylab="", lwd=1, main=titles[i],format.labels="%Y", major.ticks = 'years', 
+    ylim=range, xlab="Time", ylab="", lwd=1,format.labels="%Y", major.ticks = 'years', 
     yaxis.left=TRUE, yaxis.right=TRUE, lty='solid'))
     if (plot.class=='Down'|plot.class=='Both') print(lines(CoVaR_DATA$VaR[,i],         col="black", lwd=1,lty='dashed'))
     if (plot.class=='Both')                    print(lines(CoVaR_DATA$CoVaRUp[,i],     col="red",   lwd=1,lty='solid'))
@@ -389,6 +372,7 @@ if(0){
     print(lines(CoVaR_DATA$CoVaR$horizontal_line, col='darkgrey'))
     print(addLegend("topright", lwd=2,legend.names = c('CoVaR', 'VaR'), 
                     lty = c('solid','dashed'), col = c('red',   'black')))
+    print(title(main = titles[i], cex.main = 1.5))
     dev.off()
   }
 }
