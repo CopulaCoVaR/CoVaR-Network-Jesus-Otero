@@ -54,7 +54,7 @@ if (country=="USA-Colombia") {
   #GFEVD
   load(paste0(wd,"/Resultados/Colombia/R_files/GFEVD.USA...Colombia"), verbose=TRUE)
   #Network
-  #load("",verbose=TRUE)
+  load(paste0(wd,"/Resultados/Colombia/R_files/Dynamic_Network_USA...Colombia.R"),verbose=TRUE)
   
 }
 if (country=="USA-Brazil")   {
@@ -160,6 +160,36 @@ if(1){
                        "France-Brazil",       "France-Cote.dIvoire", "France-Indonesia",    "France-Uganda", 
                        "France-Vietnam")
 }
+
+# CoVaR plot --------------------------------------------------------------
+if(0){
+  # Unión de datos en la misma lista.
+  CoVaR_DATA=CoVaR_data
+  plot.class = c('Up', 'Down', 'Both')[1]
+  CoVaR_DATA$CoVaR$horizontal_line = 0
+  colnames=colnames(CoVaR_DATA$CoVaRUp)
+  #Gráficas
+  for (i in colnames){
+    if(plot.class=='Up')  range=c(0,max(CoVaR_DATA$CoVaRUp[,i]))
+    if(plot.class=='Down')range=c(min(CoVaR_DATA$CoVaR[,i]),0)
+    if(plot.class=='Both')range=c(min(CoVaR_DATA$CoVaR[,i]),max(CoVaR_DATA$CoVaRUp[,i]))
+    pdf(file = paste0(Resultados,'/Graficas_CoVaR','_',i,'.pdf'), onefile=FALSE)
+    print(plot.xts(if (plot.class=='Down'|plot.class=='Both')CoVaR_DATA$CoVaR[,i]else CoVaR_DATA$CoVaRUp[,i],
+               type="l",col="red", grid.col = NA, ylim=range, xlab="Time", ylab="", main=i,
+               #main.timespan=FALSE, 
+               lwd=1,format.labels="%Y", major.ticks = 'years', yaxis.left=TRUE, 
+               yaxis.right=TRUE, lty='solid'))
+    if (plot.class=='Down'|plot.class=='Both') print(lines(CoVaR_DATA$VaR[,i],         col="black", lwd=1,lty='dashed'))
+    if (plot.class=='Both')                    print(lines(CoVaR_DATA$CoVaRUp[,i],     col="red",   lwd=1,lty='solid'))
+    if (plot.class=='Up'|plot.class=='Both')   print(lines(CoVaR_DATA$VaRUp[,i],       col="black", lwd=1,lty='dashed'))
+    print(lines(CoVaR_DATA$CoVaR$horizontal_line, col='darkgrey'))
+    print(addLegend("topright", lwd=2,legend.names = c('CoVaR', 'VaR'), 
+                    lty = c('solid','dashed'), col = c('red',   'black')))
+    #print(title(main = Series.corrected[i], cex.main = 1.5))
+    dev.off()
+  }
+}
+
 #Network Dynamic
 if(0) {
   # Preparación

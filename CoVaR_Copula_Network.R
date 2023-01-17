@@ -1,5 +1,5 @@
 # Preparación -------------------------------------------------------------
-setwd("C:/Users/maico/OneDrive - Universidad Nacional de Colombia/BanRep/Value at Risk/Coffee")
+setwd("C:/Users/maico/OneDrive - Universidad Nacional de Colombia/BanRep/Value at Risk/CoVaR-Network-Jesus-Otero")
 wd = getwd()                                # Carpeta de trabajo adaptable al proyecto, se modifica automáticamente en cada computador.
 # ----------------------
 Resultados <<- paste0(wd,'/Resultados')     #<<<<<--- Capeta de resultados qué depende deldirectorio de trabajo. 
@@ -28,8 +28,8 @@ if (estimate.copula==FALSE){
   if (Serie.2=='NINO3.4' & CoVaR.type=='Less')  copula.file= 'Cop_seleccionadas_NINO3.4_2022-12-11'
   if (Serie.2=='NINO3.4' & CoVaR.type=='Equal') copula.file= 'Cop_seleccionadas_NINO3.4_2022-12-15'
   if (Serie.2=='NINO4')                         copula.file= 'Cop_seleccionadas_NINO4_2022-12-12'
-  if (Serie.2=='USA...Colombia')                copula.file= 'Cop_seleccionadas_USA...Colombia_2023-01-10'
-  if (Serie.2=='USA...Brazil')                  copula.file= 'Cop_seleccionadas_USA...Brazil_2022-12-23'
+  if (Serie.2=='USA...Colombia')                copula.file= paste0(wd,'/Resultados/Colombia/R_files/Cop_seleccionadas_USA...Colombia_2023-01-10')
+  if (Serie.2=='USA...Brazil')                  copula.file= paste0(wd,'/Resultados/Brazil/R_files/Cop_seleccionadas_USA...Brazil_2022-12-23')
   if (Serie.2=='USA...Guatemala')               copula.file= paste0(wd,'/Resultados/Guatemala/R_files/Cop_seleccionadas_USA...Guatemala_2022-12-24')
   if (Serie.2=="USA...Indonesia")               copula.file= paste0(wd,'/Resultados/Indonesia/R_files/Cop_seleccionadas_USA...Indonesia_2022-12-26')
   if (Serie.2=="USA...Uganda")                  copula.file= paste0(wd,'/Resultados/Uganda/R_files/Cop_seleccionadas_USA...Uganda_2022-12-30')
@@ -286,8 +286,8 @@ GFEVD.res       = GFEVD(Girf=GIRF.res, N.ahead=n.ahead.connectedness, plot.out='
 save(GFEVD.res, file = paste0('GFEVD.',Serie.2)) #Se guarda el objeto
 
 Static_Network  = Connectedness(GFEVD=GFEVD.res, Title='Net Pairwise directional connectedness', node.size=1, 
-                                Q1='95%', Q2='90%', Q3='85%', arrow.size=0.6, layout=NULL, n.ahead = n.ahead.connectedness, 
-                                node.label.size = 0.5, edge.width.scale=8) 
+                                Q1='95%', Q2='90%', Q3='85%', arrow.size=0.6, layout="circle", n.ahead = n.ahead.connectedness, 
+                                node.label.size = 1, edge.width.scale=8) 
 
 Dynamic_Network = Rolling_GFEVD(Data=CoVaR_data$CoVaRUp, structure='BasicEN', window.size=100,
                                 n.ahead=n.ahead.connectedness, pdf=TRUE, x11=TRUE, alpha=BigVAR.Model$Model@alpha, plot=TRUE,
