@@ -6,11 +6,10 @@ Resultados <<- paste0(wd,'/Resultados')     #<<<<<--- Capeta de resultados qué 
 # ----------------------
 data.file    = 'ENSO_DATA.r'                #<<<--- String con el nombre del archivo de datos en la carpeta de trabajo.
 # ----------------------
-Series.1     = c("USA...Colombia",        "USA...Brazil",          "USA...Guatemala",       "USA...Indonesia",      
-                 "USA...Mexico",          "USA...Uganda",            "USA...Vietnam",       "Germany...Colombia",
-                 "Germany...Brazil",      "Germany...El.Salvador", "Germany...Guatemala",   "France...Colombia",
-                 "France...Brazil",       "France...Cote.dIvoire", "France...Indonesia",    "France...Uganda", 
-                 "France...Vietnam")
+Series.1     = c("USA...Colombia",      "USA-Brazil",        "USA-Guatemala",    "USA-Indonesia",
+                 "USA-Mexico",          "USA-Uganda",        "USA-Vietnam" ,     "Germany-Colombia",
+                 "Germany-El.Salvador", "Germany-Guatemala", "France-Colombia",  "France-Brazil",
+                 "France-Cote.dIvoire", "France-Indonesia",  "France-Uganda",    "France-Vietnam")
                  #"USA...Colombia") #<<<--- Columnas de series de análisis
 # ----------------------
 Serie.2      = c("NINO3"         , "NINO3.4"        , "NINO4"          , "USA...Colombia", 
@@ -98,7 +97,7 @@ source('DynCopulaCoVaRUpper.R')
 #---- Supuesto_1: la primera col es la FECHA de la base de datos
 #---- Supuesto_2: Las col.2 hasta la penultima col. son las series que se modelan w.r.t la serie de la ultima columna (Ej. Ind Acc de varios paises)
 #---- Supuesto_3: La ultima col. es la serie que se mantiene en todas copulas (Ej: WTI)
-DATOS=read_xlsx(data.file)
+DATOS        = read_xlsx(data.file)
 DATOS_xts    = xts(DATOS[,-1], order.by = as.POSIXct(DATOS[[1]])) # (objeto XTS) Se resta la primera col. (FECHA) 
 if (Serie.2 %in% Series.1)N.Series1=ncol(DATOS_xts[,Series.1[-which(Series.1==Serie.2)]])else N.Series1=ncol(DATOS_xts[,Series.1])                                      # Se resta la primera col. (FECHA) y la ultima columna (Ej: WTI)
 Name.Serie2=Serie.2                                                             # Nombre de la ultima col. es la serie que se mantiene en todas copulas (Ej: WTI)
@@ -286,8 +285,8 @@ GFEVD.res       = GFEVD(Girf=GIRF.res, N.ahead=n.ahead.connectedness, plot.out='
 save(GFEVD.res, file = paste0('GFEVD.',Serie.2)) #Se guarda el objeto
 
 Static_Network  = Connectedness(GFEVD=GFEVD.res, Title='Net Pairwise directional connectedness', node.size=1, 
-                                Q1='95%', Q2='90%', Q3='85%', arrow.size=0.6, layout="circle", n.ahead = n.ahead.connectedness, 
-                                node.label.size = 1, edge.width.scale=8) 
+                                Q1='95%', Q2='90%', Q3='85%', arrow.size=0.6, layout=NULL, n.ahead = n.ahead.connectedness, 
+                                node.label.size = 1.5, edge.width.scale=8) 
 
 Dynamic_Network = Rolling_GFEVD(Data=CoVaR_data$CoVaRUp, structure='BasicEN', window.size=100,
                                 n.ahead=n.ahead.connectedness, pdf=TRUE, x11=TRUE, alpha=BigVAR.Model$Model@alpha, plot=TRUE,
