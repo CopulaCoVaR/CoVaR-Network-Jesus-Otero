@@ -4,17 +4,17 @@ wd = getwd()                                # Carpeta de trabajo adaptable al pr
 # ----------------------
 Resultados <<- paste0(wd,'/Resultados')     #<<<<<--- Capeta de resultados qué depende deldirectorio de trabajo. 
 # ----------------------
-data.file    = 'ENSO_DATA.r'                #<<<--- String con el nombre del archivo de datos en la carpeta de trabajo.
+data.file    = 'Data_Main.xlsx'                #<<<--- String con el nombre del archivo de datos en la carpeta de trabajo.
 # ----------------------
-Series.1     = c("USA...Colombia",      "USA-Brazil",        "USA-Guatemala",    "USA-Indonesia",
+Series.1     = c("USA-Colombia",      "USA-Brazil",        "USA-Guatemala",    "USA-Indonesia",
                  "USA-Mexico",          "USA-Uganda",        "USA-Vietnam" ,     "Germany-Colombia",
                  "Germany-El.Salvador", "Germany-Guatemala", "France-Colombia",  "France-Brazil",
                  "France-Cote.dIvoire", "France-Indonesia",  "France-Uganda",    "France-Vietnam")
                  #"USA...Colombia") #<<<--- Columnas de series de análisis
 # ----------------------
-Serie.2      = c("NINO3"         , "NINO3.4"        , "NINO4"          , "USA...Colombia", 
-                 "USA...Brazil"  , "USA...Guatemala", "USA...Indonesia", "USA...Mexico"  , 
-                 "USA...Uganda", "USA...Vietnam")[6]         #<<<--- Columna de serie de referencia.
+Serie.2      = c("NINO3"         , "NINO3.4"        , "NINO4"          , "USA-Colombia", 
+                 "USA-Brazil"  , "USA-Guatemala", "USA-Indonesia", "USA-Mexico"  , 
+                 "USA-Uganda", "USA-Vietnam")[6]         #<<<--- Columna de serie de referencia.
 # ----------------------
 alpha.in  =c(0.01, 0.05, 0.95, 0.99)[2]      # Alpha para el CoVaR
 beta.in   =c(0.01, 0.05, 0.95, 0.99)[2]     # Beta para el CoVaR
@@ -27,12 +27,12 @@ if (estimate.copula==FALSE){
   if (Serie.2=='NINO3.4' & CoVaR.type=='Less')  copula.file= 'Cop_seleccionadas_NINO3.4_2022-12-11'
   if (Serie.2=='NINO3.4' & CoVaR.type=='Equal') copula.file= 'Cop_seleccionadas_NINO3.4_2022-12-15'
   if (Serie.2=='NINO4')                         copula.file= 'Cop_seleccionadas_NINO4_2022-12-12'
-  if (Serie.2=='USA...Colombia')                copula.file= paste0(wd,'/Resultados/Colombia/R_files/Cop_seleccionadas_USA...Colombia_2023-01-10')
-  if (Serie.2=='USA...Brazil')                  copula.file= paste0(wd,'/Resultados/Brazil/R_files/Cop_seleccionadas_USA...Brazil_2022-12-23')
-  if (Serie.2=='USA...Guatemala')               copula.file= paste0(wd,'/Resultados/Guatemala/R_files/Cop_seleccionadas_USA...Guatemala_2022-12-24')
-  if (Serie.2=="USA...Indonesia")               copula.file= paste0(wd,'/Resultados/Indonesia/R_files/Cop_seleccionadas_USA...Indonesia_2022-12-26')
-  if (Serie.2=="USA...Uganda")                  copula.file= paste0(wd,'/Resultados/Uganda/R_files/Cop_seleccionadas_USA...Uganda_2022-12-30')
-  if (Serie.2=="USA...Mexico")                  copula.file= paste0(wd,"/Resultados/Mexico/R_files/Cop_seleccionadas_USA...Mexico_2022-12-28")
+  if (Serie.2=='USA-Colombia')                copula.file= paste0(wd,'/Resultados/Colombia/R_files/Cop_seleccionadas_USA...Colombia_2023-01-10')
+  if (Serie.2=='USA-Brazil')                  copula.file= paste0(wd,'/Resultados/Brazil/R_files/Cop_seleccionadas_USA...Brazil_2022-12-23')
+  if (Serie.2=='USA-Guatemala')               copula.file= paste0(wd,'/Resultados/Guatemala/R_files/Cop_seleccionadas_USA...Guatemala_2022-12-24')
+  if (Serie.2=="USA-Indonesia")               copula.file= paste0(wd,'/Resultados/Indonesia/R_files/Cop_seleccionadas_USA...Indonesia_2022-12-26')
+  if (Serie.2=="USA-Uganda")                  copula.file= paste0(wd,'/Resultados/Uganda/R_files/Cop_seleccionadas_USA...Uganda_2022-12-30')
+  if (Serie.2=="USA-Mexico")                  copula.file= paste0(wd,"/Resultados/Mexico/R_files/Cop_seleccionadas_USA...Mexico_2022-12-28")
 } # Copulas SSTA
 # ----------------------
 Forecast     = c('in sample', 'rolling')[2] #<<<--- Determina el tipo de pronóstico a llevar a cabo.
