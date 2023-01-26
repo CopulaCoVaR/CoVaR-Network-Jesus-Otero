@@ -29,7 +29,7 @@
 Connectedness = function(GFEVD, n.ahead=10, type='GFEVD', plot.network=TRUE, layout = NULL, 
                          Title='Insert title', edge.width.scale=30, node.size=2, arrow.size = 1,
                          node.label.size=1, Q1 = '95%', Q2 = '90%', Q3 = '85%', Q1.scale = 1.5, 
-                         Q2.scale = 1, Q3.scale = 1 ){
+                         Q2.scale = 1, Q3.scale = 1, pdf.name.serie=NULL ){
   
   #Verificacion de que los cuantiles enten on orden descendente
   if (Q1 < Q2 | Q1 < Q3 | Q2 < Q3) {
@@ -133,6 +133,11 @@ Connectedness = function(GFEVD, n.ahead=10, type='GFEVD', plot.network=TRUE, lay
            main = Title, vertex.label.cex = node.label.size, edge.arrow.size = arrow.size,
            xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node"))
       
+      
+      pdf(file = paste0(Resultados,'/Graficas_Red','_',pdf.name.serie,'.pdf'), onefile=FALSE)
+      print(plot(network, edge.width = ((E(network)$weight)*edge.width.scale),
+                main = Title, vertex.label.cex = node.label.size, edge.arrow.size = arrow.size,
+                xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node")))
     }
     else if (layout == 'circle'){ #Estilo poliedro
       x11()
@@ -141,12 +146,27 @@ Connectedness = function(GFEVD, n.ahead=10, type='GFEVD', plot.network=TRUE, lay
            main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
            xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node"))
       
+      
+      pdf(file = paste0(Resultados,'/Graficas_Red','_',pdf.name.serie,'.pdf'), onefile=FALSE)
+      print(plot(network,layout=layout.circle(network),
+                edge.width = ((E(network)$weight)*edge.width.scale),
+                main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
+                xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node")))
+      
+      
     }else if (layout == 'star'){ #Estilo poliedro
       x11()
       plot(network,layout=layout.star(network),
            edge.width = ((E(network)$weight)*edge.width.scale),
            main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
            xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node"))
+      
+      
+      pdf(file = paste0(Resultados,'/Graficas_Red','_',pdf.name.serie,'.pdf'), onefile=FALSE)
+      print(plot(network,layout=layout.star(network),
+                edge.width = ((E(network)$weight)*edge.width.scale),
+                main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
+                xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node")))
       
     }else if (layout == 'sphere'){ #Estilo poliedro
       x11()
@@ -155,13 +175,19 @@ Connectedness = function(GFEVD, n.ahead=10, type='GFEVD', plot.network=TRUE, lay
            main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
            xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node"))
       
+      pdf(file = paste0(Resultados,'/Graficas_Red','_',pdf.name.serie,'.pdf'), onefile=FALSE)
+      print(plot(network,layout=layout.sphere(network),
+                edge.width = ((E(network)$weight)*edge.width.scale),
+                main = Title,vertex.label.cex = node.label.size,edge.arrow.size = arrow.size,
+                xlab = paste0("black: Upper " ,  q1.u ,"th percentile \n red: Upper ", q2.u ,"th percentile \n orange: Upper ", q3.u , "th percentile \n node size: number of edges connected to the node")))
+      
     }
     
   }
-  list(table=table, gephi=table_gephi)
+  list(table=table, gephi=table_gephi, plot=plot)
 }
 
 #for (i in 1:nrow(Network.mat)) {
- # Network.mat[i,(ncol(Network.mat)+1)] = sum(Network.mat[1,])
+# Network.mat[i,(ncol(Network.mat)+1)] = sum(Network.mat[1,])
 #}
 
