@@ -49,7 +49,7 @@ n.ahead.connectedness=10                    # Step-ahead del GFEVD para la red.
 country=c("USA-Colombia", "USA-Brazil",
           "USA-Guatemala", "USA-Indonesia",
           "USA-Mexico", "USA-Uganda", 
-          "USA-Vietnam")[1]
+          "USA-Vietnam")
 
 plot.class=c("net","star","sphere", "circle")[1]
 if(plot.class=="net")plot.class=NULL
@@ -164,7 +164,7 @@ for (kk in country) {
   
   
   # Network -----------------------------------------------------------------
-  if (0) {
+  if(0){
     Network.plot.data=Connectedness(GFEVD     = GFEVD.res, Title=paste0("Net Pairwise directional connectedness","\n" ,"Stressed serie: ",kk), 
                                     node.size = 1.5,   node.label.size=0.7, Q1='95%', Q2='90%', Q3='85%', 
                                     arrow.size= 0.6,  layout=plot.class, n.ahead = n.ahead.connectedness, 
@@ -175,7 +175,7 @@ for (kk in country) {
   }
   
   # CoVaR plot --------------------------------------------------------------
-  if(0)  {
+  if(0){
     # Unión de datos en la misma lista.
     CoVaR_DATA=CoVaR_data
     plot.class = c('Up', 'Down', 'Both')[1]
@@ -206,7 +206,7 @@ for (kk in country) {
   }
   
   # Network Dynamic 
-  if(1)  {
+  if(0){
     theme=c("classic", "grey")[2]
     # Preparación
     for(i in 1:ncol(Dynamic_Network$From.Degree.Dynamic)){
@@ -228,9 +228,15 @@ for (kk in country) {
         plot      = to.plot + from.plot + net.plot + plot_layout(ncol=1) 
         
         x11()
-        print(plot + plot_annotation(title = paste("Dynamic total directional connectedness of", Serie.1),
-                                     subtitle = paste0("Stressed series: ",country)))
-      }    
+        #Título Completo
+        if (1) {
+          print(plot+ plot_annotation(title = paste("Dynamic total directional connectedness of", Serie.1) ,subtitle = paste0("Stressed series: ",country)))
+          
+        }
+        #Título sólo serie a estresar
+        if (0) {
+          print(plot+plot_annotation(title= paste(Serie.1),theme    = theme(plot.title = element_text(size = 24, hjust = 0.5))))
+        }      }    
       if(theme=="grey")   {
         to.plot   = ggplot(data=data.plot, mapping=aes(x=Time, y=To))    +geom_line(colour="steelblue")+theme_gray() + labs(x = element_blank(), y = "To")  +scale_x_date(expand=c(0,0), limits=c(data.plot[1,"Time"],data.plot[nrow(data.plot),"Time"])+2)
         from.plot = ggplot(data=data.plot, mapping=aes(x=Time, y=From))  +geom_line(colour="steelblue")+theme_gray() + labs(x = element_blank(), y = "From")+scale_x_date(expand=c(0,0), limits=c(data.plot[1,"Time"],data.plot[nrow(data.plot),"Time"])+2)
@@ -240,12 +246,13 @@ for (kk in country) {
         pdf(file = paste0(Resultados,'/Graficas_CoVaR','_',kk,"_",Serie.1,'.pdf'), onefile=FALSE)
         #Título Completo
         if (1) {
-          print(plot+ plot_annotation(title = paste("Dynamic total directional connectedness of", Serie.1) ,subtitle = paste0("Stressed series: ",country)))
+          print(plot+ plot_annotation(title  = paste("Dynamic total directional connectedness of", Serie.1) ,subtitle = paste0("Stressed series: ",country)
+                                      ,theme = theme(plot.title = element_text(size = 24, hjust = 0.5))))
           
         }
         #Título sólo serie a estresar
         if (0) {
-          print(plot+plot_annotation(title= paste(Serie.1),theme    = theme(plot.title = element_text(size = 20, hjust = 0.5))))
+          print(plot+plot_annotation(title= paste(Serie.1),theme= theme(plot.title = element_text(size = 24, hjust = 0.5))))
         }
       }
       graphics.off()
@@ -253,7 +260,7 @@ for (kk in country) {
   } 
   
   # Network Dynamic Total
-  if(0)  {
+  if(0){
     theme=c("classic", "grey")[2]
     # Preparación
       #Serie.1 = colnames(Dynamic_Network$From.Degree.Dynamic[,i])
@@ -287,7 +294,7 @@ for (kk in country) {
   }
   
   #CoVaR plot
-  if(0)  {
+  if(0){
     for (i in 1:ncol(CoVaR_data$CoVaRUp)) {
       CoVaRUp   = CoVaR_data$CoVaRUp[,i]
       VaRUp     = CoVaR_data$VaRUp[,i]
