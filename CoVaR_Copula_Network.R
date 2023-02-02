@@ -119,6 +119,29 @@ if(dif.Serie.1==TRUE|dif.Serie.2==TRUE) DATOS_WNA =DATOS_WNA[-1,]               
 DATOS_WNA = na.fill(DATOS_WNA, 'extend')
 # ---- Se elige la muestra a trabajar en función del argumento inicial Sample ---- #
 Sample=DATOS_WNA
+
+# Pruebas de Raíz Unitaria ------------------------------------------------
+
+for (i in 1:ncol(Sample)) {
+  trend = ur.df(Sample[,i], lags=6, selectlags = "AIC",type="trend")
+  drift = ur.df(Sample[,i], lags=6, selectlags = "AIC",type="drift")
+  none  = ur.df(Sample[,i], lags=6, selectlags = "AIC",type="none")
+  
+  if (trend@teststat[,"phi3"]<trend@cval["phi3","5pct"]) {
+    cat(colnames(Sample)[i],"\n")
+    type="trend"
+    print(summary(trend))
+  } else if (drift@teststat[,"phi1"]<drift@cval["phi1","5pct"]){
+    cat(colnames(Sample)[i],"\n")
+    type="drift"
+    print(summary(drift))
+  } else if (none@teststat[,"tau1"]<none@cval["tau1","5pct"]){
+    cat(colnames(Sample)[i],"\n")
+    type="none"
+    print(summary(none))
+  }
+}  
+
 # Estadísticas descriptivas -----------------------------------------------
 if(0){
   data.stats = Sample
