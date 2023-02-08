@@ -33,6 +33,7 @@ if (estimate.copula==FALSE){
   if (Serie.2=="USA-Indonesia")               copula.file= paste0(wd,'/Resultados/Indonesia/R_files/Cop_seleccionadas_USA...Indonesia_2022-12-26')
   if (Serie.2=="USA-Uganda")                  copula.file= paste0(wd,'/Resultados/Uganda/R_files/Cop_seleccionadas_USA...Uganda_2022-12-30')
   if (Serie.2=="USA-Mexico")                  copula.file= paste0(wd,"/Resultados/Mexico/R_files/Cop_seleccionadas_USA...Mexico_2022-12-28")
+  if (Serie.2=="USA-Vietnam")                 copula.file= paste0(wd,"/Resultados/Mexico/R_files/Cop_seleccionadas_USA...Vietnam_2023-01-07")
 } # Copulas SSTA
 # ----------------------
 Forecast     = c('in sample', 'rolling')[2] #<<<--- Determina el tipo de pronóstico a llevar a cabo.
